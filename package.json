@@ -1,0 +1,29 @@
+{
+  "name": "meants",
+  "version": "0.0.1",
+  "description": "MEAN Stack Framework based on typescript",
+  "main": "meants.js",
+  "scripts": {
+    "test": "mean-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vecbralis/meants.git"
+  },
+  "keywords": [
+    "MEAN",
+    "angularjs",
+    "angular2",
+    "express.js",
+    "express",
+    "mongodb",
+    "mongoose",
+    "passportjs"
+  ],
+  "author": "Martins Vecbralis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vecbralis/meants/issues"
+  },
+  "homepage": "https://github.com/vecbralis/meants#readme"
+}
