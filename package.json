@@ -1,12 +1,10 @@
 {
   "name": "meants",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "MEAN Stack Framework based on TypeScript",
   "main": "meants.js",
   "scripts": {
-    "test": "mean-test",
-    "install": "tsd install",
-    "preinstall": "tsd install"
+    "test": "mean-test"
   },
   "repository": {
     "type": "git",
