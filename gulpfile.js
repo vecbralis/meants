@@ -5,7 +5,10 @@ var gulp   = require('gulp'),
 
 var typescriptFiles = [
 	'./**/*.ts',
-	'!typings/**/*.ts',
+  '!typings/**/*.ts',
+  '!typings/**/*.ts',
+  '!*.d.ts',
+	'!mtypings/**/*.ts',
 	'!interface/**/*.ts',
 	'!node_modules/**/*.ts',
 	'!bower_components/**/*.ts'
@@ -15,7 +18,7 @@ var typescriptFiles = [
 gulp.task('typescript', function(){
   return gulp.src(typescriptFiles)
         .pipe(ts({
-            module: 'amd'
+            module: 'commonjs'
         })).js.pipe(gulp.dest('./'));
 });
 
