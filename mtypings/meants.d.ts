@@ -8,6 +8,9 @@ declare module "meants" {
 	 */
 	var configuration: {
 		path: String,
+		customPath: String,
+		port: Number,
+		listenIp: String
 	};
 
 	namespace bootstrap {

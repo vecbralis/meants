@@ -1,11 +1,11 @@
 'use strict';
 var gulp   = require('gulp'),
     watch  = require('gulp-watch'),
-    ts     = require('gulp-typescript');
+    ts     = require('gulp-typescript'),
+    exec = require('gulp-exec');
 
 var typescriptFiles = [
 	'./**/*.ts',
-  '!typings/**/*.ts',
   '!typings/**/*.ts',
   '!*.d.ts',
 	'!mtypings/**/*.ts',
@@ -18,8 +18,11 @@ var typescriptFiles = [
 gulp.task('typescript', function(){
   return gulp.src(typescriptFiles)
         .pipe(ts({
-            module: 'commonjs'
-        })).js.pipe(gulp.dest('./'));
+          "target": "ES6",
+          "module": "commonjs"
+        }))
+        .js.pipe(gulp.dest('./'))
+        .pipe(exec('echo "2" > ../../tt.ts'));
 });
 
 //Default watch task
