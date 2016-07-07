@@ -4,132 +4,137 @@
 
 import * as express from "express";
 import * as bodyParser from "body-parser";
+import * as _ from "lodash";
 import {Configuration} from "./configuration";
 
 export class Server {
 
-	public app: any;
+    public app: any;
 
-	constructor() {
+    constructor() {
 
-		this.app = express();
+        this.app = express();
 
-		this.loadConfiguration()
-			.then(() => {
-				return this.loadCors();
-			})
-			.then(() => {
-				return this.loadRoutes();
-			})
-			.then(() => {
-				return this.loadDevelopmentMode();
-			})
-			.then(() => {
-				this.startApp();
+        this.loadConfiguration()
+            .then(() => {
+                return this.loadCors();
+            })
+            .then(() => {
+                return this.loadRoutes();
+            })
+            .then(() => {
+                return this.loadDevelopmentMode();
+            })
+            .then(() => {
+                this.startApp();
 
-				if (this.app.get('env') === 'development') { 
-					console.log('Server started on', Configuration.listenIp, 'Port', Configuration.port);
-				}	
+                if (this.app.get('env') === 'development') {
+                    console.log('Server started on', Configuration.listenIp, 'Port', Configuration.port);
+                }
 
-			});
+            });
 
-	}
+    }
 
-	/**
-	 * Load default configuration for ExpressJS app
-	 */
-	loadConfiguration() {
+    /**
+     * Load default configuration for ExpressJS app
+     */
+    loadConfiguration() {
 
-		return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 
-			this.app.use(bodyParser.urlencoded({ extended: true }));
-			this.app.use(bodyParser.json());
+            this.app.use(bodyParser.urlencoded({
+                extended: true
+            }));
+            this.app.use(bodyParser.json());
 
-			resolve(true);
+            resolve(true);
 
-		});
+        });
 
-	}
+    }
 
-	/**
-	 * Load Cors header so that it works with angularjs and different domains
-	 */
-	loadCors(){
+    /**
+     * Load Cors header so that it works with angularjs and different domains
+     */
+    loadCors() {
 
-		return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 
-			this.app.use(function(req, res, next) {
-				res.header('Access-Control-Allow-Origin', '*');
-				res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-				res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Client, Authorization, Remember-me');
-				next();
-			});
+            this.app.use(function(req, res, next) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Client, Authorization, Remember-me');
+                next();
+            });
 
-			resolve(true);
+            resolve(true);
 
-		});
+        });
 
-	}
+    }
 
-	/**
-	 * Load all routes from folders and files
-	 */
-	loadRoutes() {
+    /**
+     * Load all routes from folders and files
+     */
+    loadRoutes() {
 
-		var routes = require(Configuration.path + '/app/http/routes');
+        var routes = require(Configuration.path + '/app/http/routes'); //App routes
+        var routes2 = require('../app/http/routes'); //Default app routes
+        var routes = _.merge(routes, routes2);
 
-		return new Promise((resolve, reject) => {
-			
-			/**
-			 * Load all routers in one place from different files
-			 * @param {[any]} var route in routes Express.js router object
-			 */
-			for (var route in routes) {
-				this.app.use(`/${Configuration.customPath}${route}`, routes[route]);
-			}
+        return new Promise((resolve, reject) => {
 
-			resolve(true);
+            /**
+             * Load all routers in one place from different files
+             * @param {[any]} var route in routes Express.js router object
+             */
+            console.log(routes);
+            for (var route in routes) {
+                this.app.use(`/${Configuration.customPath}${route}`, routes[route]);
+            }
 
-		});
+            resolve(true);
 
-	}
+        });
 
-	/**
-	 * Check if ENV is in development mode and run all needed things
-	 */
-	loadDevelopmentMode() {
+    }
 
-		return new Promise((resolve, reject) => {
+    /**
+     * Check if ENV is in development mode and run all needed things
+     */
+    loadDevelopmentMode() {
 
-			if (this.app.get('env') === 'development') {
-				this.app.use(function(err, req, res, next) {
-					res.status(err.status || 500);
-					res.render('error', {
-						message: err.message,
-						error: err
-					});
-				});
-			}
+        return new Promise((resolve, reject) => {
 
-			resolve(true);
+            if (this.app.get('env') === 'development') {
+                this.app.use(function(err, req, res, next) {
+                    res.status(err.status || 500);
+                    res.render('error', {
+                        message: err.message,
+                        error: err
+                    });
+                });
+            }
 
-		});
+            resolve(true);
 
-	}
+        });
 
-	/**
-	 * Start full APP
-	 */
-	startApp() {
+    }
 
-		return new Promise((resolve, reject) => {
+    /**
+     * Start full APP
+     */
+    startApp() {
 
-			this.app.listen(Configuration.port, Configuration.listenIp);
-			resolve(true);
+        return new Promise((resolve, reject) => {
 
-		});
+            this.app.listen(Configuration.port, Configuration.listenIp);
+            resolve(true);
 
-	}
+        });
+
+    }
 
 }
-

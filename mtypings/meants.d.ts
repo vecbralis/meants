@@ -10,7 +10,10 @@ declare module "meants" {
 		path: String,
 		customPath: String,
 		port: Number,
-		listenIp: String
+		listenIp: String,
+		secretKey: String,
+		tokenExpiresIn: Number,
+		providers: Array<any>
 	};
 
 	namespace bootstrap {

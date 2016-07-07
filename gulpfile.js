@@ -2,6 +2,7 @@
 var gulp   = require('gulp'),
     watch  = require('gulp-watch'),
     ts     = require('gulp-typescript'),
+    notify        = require("gulp-notify"),
     exec = require('gulp-exec');
 
 var typescriptFiles = [
@@ -22,7 +23,8 @@ gulp.task('typescript', function(){
           "module": "commonjs"
         }))
         .js.pipe(gulp.dest('./'))
-        .pipe(exec('echo "2" > ../../tt.ts'));
+        .pipe(exec('echo "2" > ../../tt.ts'))
+        .pipe(notify('Changes saved meants'));
 });
 
 //Default watch task
